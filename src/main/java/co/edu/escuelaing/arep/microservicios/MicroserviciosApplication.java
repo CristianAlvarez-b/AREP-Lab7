@@ -1,13 +1,12 @@
-package co.edu.escuelaing.arep.microservicios.Lab7;
+package co.edu.escuelaing.arep.microservicios;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Lab7Application {
+public class MicroserviciosApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Lab7Application.class, args);
+		SpringApplication.run(MicroserviciosApplication.class, args);
 	}
-
 }
