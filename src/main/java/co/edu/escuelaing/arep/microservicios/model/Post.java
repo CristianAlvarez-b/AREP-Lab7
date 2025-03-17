@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 
 @Entity
 @Getter
@@ -24,4 +26,12 @@ public class Post {
     @JoinColumn(name = "repost_id")
     @JsonBackReference
     private Repost repost;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
+    private Date timestamp;
+
+    @PrePersist
+    protected void onCreate() {
+        this.timestamp = new Date();
+    }
 }

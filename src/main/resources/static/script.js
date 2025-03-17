@@ -1,5 +1,4 @@
 const API_URL = "http://localhost:8080";
-let replyToPostId = null;
 
 async function loadUsers() {
     try {
@@ -18,55 +17,25 @@ async function loadPosts() {
         let response = await fetch(`${API_URL}/posts`);
         let posts = await response.json();
 
-        let postList = posts.map(post => `
-            <div class='post'>
-                <strong>${post.user.username}:</strong> ${post.content}
-                <button onclick="openReplyModal(${post.id}, '${post.user.username}')">Responder</button>
-                <div class="replies">
-                    ${post.reposts ? post.reposts.map(repost => `<div class='reply'><strong>${repost.user.username}:</strong> ${repost.content}</div>`).join("") : ""}
+        let postList = posts.map(post => {
+            let date = new Date(post.timestamp);
+            let formattedDate = date.toLocaleString(); // Formato legible para la fecha
+
+            return `
+                <div class='post'>
+                    <strong>${post.user.username}:</strong> ${post.content} <br>
+                    <small>Publicado el: ${formattedDate}</small>
                 </div>
-            </div>
-        `).join("");
+            `;
+        }).join("");
 
         document.getElementById("posts").innerHTML = postList;
     } catch (error) {
         console.error("Error al cargar posts:", error);
     }
 }
-function openReplyModal(postId, username) {
-    replyToPostId = postId; // Guardamos el ID del post al que vamos a responder
-    document.getElementById("replyToUser").innerText = username;
-    document.getElementById("replyModal").style.display = "block";
-}
 
-function closeReplyModal() {
-    replyToPostId = null;
-    document.getElementById("replyContent").value = "";
-    document.getElementById("replyModal").style.display = "none";
-}
 
-async function createRepost() {
-    let repost = {
-        content: document.getElementById("replyContent").value,
-        userId: document.getElementById("userSelect").value, // Usuario que responde
-        postId: replyToPostId // ID del post al que responde
-    };
-
-    try {
-        let response = await fetch(`${API_URL}/streams`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(repost)
-        });
-
-        if (!response.ok) throw new Error("Error al crear repost");
-
-        closeReplyModal();
-        await loadPosts();
-    } catch (error) {
-        console.error(error.message);
-    }
-}
 async function updateUserSelectors() {
     try {
         let response = await fetch(`${API_URL}/users`);
@@ -75,10 +44,7 @@ async function updateUserSelectors() {
         let users = await response.json();
         let options = users.map(user => `<option value="${user.id}">${user.username}</option>`).join("");
 
-        // Asignar opciones a los selectores de respuesta en cada post
-        document.querySelectorAll("[id^=replyUserSelect-]").forEach(select => {
-            select.innerHTML = options;
-        });
+
     } catch (error) {
         console.error("Error al actualizar selectores de usuario:", error);
     }
@@ -142,41 +108,7 @@ async function createPost() {
     }
 }
 
-function showReplyForm(postId) {
-    let replyForm = document.getElementById(`replyForm-${postId}`);
-    replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
-}
 
-async function createReply(postId) {
-    let userId = document.getElementById(`replyUserSelect-${postId}`).value;
-    let content = document.getElementById(`replyContent-${postId}`).value.trim();
-
-    if (!content) {
-        alert("El contenido de la respuesta no puede estar vacío.");
-        return;
-    }
-
-    let replyData = {
-        content: content,
-        userId: Number(userId),
-        postId: postId
-    };
-
-    try {
-        let response = await fetch(`${API_URL}/posts/${postId}/replies`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(replyData)
-        });
-
-        if (!response.ok) throw new Error("Error al crear respuesta");
-
-        document.getElementById(`replyContent-${postId}`).value = "";
-        await loadPosts();
-    } catch (error) {
-        console.error(error.message);
-    }
-}
 
 document.addEventListener("DOMContentLoaded", () => {
     loadUsers();

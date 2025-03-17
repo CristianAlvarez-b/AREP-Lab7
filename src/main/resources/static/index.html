@@ -4,36 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Twitter</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .post { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
-        .reply { margin-left: 20px; font-size: 0.9em; border-left: 2px solid #ddd; padding-left: 10px; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
 <h1>Mini Twitter</h1>
 
-<h2>Crear Usuario</h2>
-<input type="text" id="username" placeholder="Nombre de usuario">
-<input type="email" id="email" placeholder="Correo electrónico">
-<button onclick="createUser()">Crear Usuario</button>
+<div class="container">
+    <h2>Crear Usuario</h2>
+    <input type="text" id="username" placeholder="Nombre de usuario">
+    <input type="email" id="email" placeholder="Correo electrónico">
+    <button onclick="createUser()">Crear Usuario</button>
+</div>
 
-<h2>Publicar</h2>
-<select id="userSelect"></select>
-<input type="text" id="postContent" placeholder="Escribe algo (máx 140 caracteres)" maxlength="140">
-<button onclick="createPost()">Publicar</button>
+<div class="container">
+    <h2>Publicar</h2>
+    <select id="userSelect"></select>
+    <input type="text" id="postContent" placeholder="Escribe algo (máx 140 caracteres)" maxlength="140">
+    <button onclick="createPost()">Publicar</button>
+</div>
 
-<h2>Posts</h2>
-<div id="posts"></div>
-
-<!-- Modal para responder a un post -->
-<div id="replyModal" style="display: none;">
-    <h3>Responder a <span id="replyToUser"></span></h3>
-    <textarea id="replyContent" placeholder="Escribe tu respuesta..."></textarea>
-    <button onclick="createRepost()">Enviar respuesta</button>
-    <button onclick="closeReplyModal()">Cancelar</button>
+<div class="container">
+    <h2>Posts</h2>
+    <div id="posts"></div>
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
