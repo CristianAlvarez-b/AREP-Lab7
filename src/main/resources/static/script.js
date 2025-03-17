@@ -1,8 +1,10 @@
-const API_URL = "http://localhost:8080";
+const API_URL = "https://cc95-181-237-183-246.ngrok-free.app";
 
 async function loadUsers() {
     try {
-        let response = await fetch(`${API_URL}/users`);
+        let response = await fetch(`${API_URL}/users`, {
+            headers: { "ngrok-skip-browser-warning": "true" }
+        });
         let users = await response.json();
 
         let options = users.map(user => `<option value="${user.id}">${user.username}</option>`).join("");
@@ -14,12 +16,14 @@ async function loadUsers() {
 
 async function loadPosts() {
     try {
-        let response = await fetch(`${API_URL}/posts`);
+        let response = await fetch(`${API_URL}/posts`, {
+            headers: { "ngrok-skip-browser-warning": "true" }
+        });
         let posts = await response.json();
 
         let postList = posts.map(post => {
             let date = new Date(post.timestamp);
-            let formattedDate = date.toLocaleString(); // Formato legible para la fecha
+            let formattedDate = date.toLocaleString();
 
             return `
                 <div class='post'>
@@ -35,15 +39,16 @@ async function loadPosts() {
     }
 }
 
-
 async function updateUserSelectors() {
     try {
-        let response = await fetch(`${API_URL}/users`);
+        let response = await fetch(`${API_URL}/users`, {
+            headers: { "ngrok-skip-browser-warning": "true" }
+        });
+
         if (!response.ok) throw new Error("Error al obtener usuarios");
 
         let users = await response.json();
         let options = users.map(user => `<option value="${user.id}">${user.username}</option>`).join("");
-
 
     } catch (error) {
         console.error("Error al actualizar selectores de usuario:", error);
@@ -64,7 +69,10 @@ async function createUser() {
     try {
         let response = await fetch(`${API_URL}/users`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "ngrok-skip-browser-warning": "true"
+            },
             body: JSON.stringify(user)
         });
 
@@ -95,7 +103,10 @@ async function createPost() {
     try {
         let response = await fetch(`${API_URL}/posts`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "ngrok-skip-browser-warning": "true"
+            },
             body: JSON.stringify(postData)
         });
 
@@ -107,8 +118,6 @@ async function createPost() {
         console.error(error.message);
     }
 }
-
-
 
 document.addEventListener("DOMContentLoaded", () => {
     loadUsers();
