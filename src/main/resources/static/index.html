@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,24 +9,32 @@
 <body>
 
 <h1>Mini Twitter</h1>
+<!-- Sección visible solo si el usuario está autenticado -->
+<div sec:authorize="isAuthenticated()">
+    <a th:href="@{/logout}"></a>
+    <div class="container">
+        <h2>Crear Usuario</h2>
+        <input type="text" id="username" placeholder="Nombre de usuario">
+        <input type="email" id="email" placeholder="Correo electrónico">
+        <button onclick="createUser()">Crear Usuario</button>
+    </div>
 
-<div class="container">
-    <h2>Crear Usuario</h2>
-    <input type="text" id="username" placeholder="Nombre de usuario">
-    <input type="email" id="email" placeholder="Correo electrónico">
-    <button onclick="createUser()">Crear Usuario</button>
+    <div class="container">
+        <h2>Publicar</h2>
+        <select id="userSelect"></select>
+        <input type="text" id="postContent" placeholder="Escribe algo (máx 140 caracteres)" maxlength="140">
+        <button onclick="createPost()">Publicar</button>
+    </div>
+
+    <div class="container">
+        <h2>Posts</h2>
+        <div id="posts"></div>
+    </div>
+
 </div>
-
-<div class="container">
-    <h2>Publicar</h2>
-    <select id="userSelect"></select>
-    <input type="text" id="postContent" placeholder="Escribe algo (máx 140 caracteres)" maxlength="140">
-    <button onclick="createPost()">Publicar</button>
-</div>
-
-<div class="container">
-    <h2>Posts</h2>
-    <div id="posts"></div>
+<!-- Sección visible solo si el usuario NO está autenticado -->
+<div sec:authorize="isAnonymous()">
+    <a th:href="@{/oauth2/authorization/cognito}"></a>
 </div>
 
 <script src="script.js"></script>
