@@ -10,3 +10,8 @@ Cree un aplicación JS para usar el servicio. Depliegue la aplicación en S3. As
 
 https://github.com/user-attachments/assets/ac980164-5293-4c56-ac68-4f6de058c4f7
 
+Agregue seguridad usando JWT con el servicio cognito de AWS o otra tecnología.
+
+
+https://github.com/user-attachments/assets/5b23ca6b-346a-4a0e-8785-187f4abd51e9
+
