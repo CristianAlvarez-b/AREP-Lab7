@@ -18,6 +18,7 @@ https://github.com/user-attachments/assets/5b23ca6b-346a-4a0e-8785-187f4abd51e9
 Separe el monolito en tres microservicios independientes usando lambda.
 Despliegue el servicio en AWS lambda
 
+Codigo fuente utilizado para los microservicios de las funciones lambda: https://github.com/CristianAlvarez-b/AREP-Lab7-Lambda-source.git
 
 https://github.com/user-attachments/assets/416c9f0f-8e6c-46a6-8a50-9cc717d5570e
 
