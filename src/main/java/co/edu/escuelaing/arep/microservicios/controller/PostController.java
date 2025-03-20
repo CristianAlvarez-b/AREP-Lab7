@@ -34,8 +34,14 @@ public class PostController {
     @PostMapping
     public ResponseEntity<?> createPost(@RequestBody Map<String, Object> requestBody) {
         String content = (String) requestBody.get("content");
-        Long userId = ((Number) requestBody.get("userId")).longValue();
+        Object userIdObject = requestBody.get("userId");
 
+        // Validación para evitar NullPointerException
+        if (content == null || userIdObject == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Content and userId are required"));
+        }
+
+        Long userId = ((Number) userIdObject).longValue();
         Post createdPost = postService.createPost(content, userId);
 
         String username = createdPost.getUser().getUsername();
