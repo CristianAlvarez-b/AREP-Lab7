@@ -120,14 +120,6 @@ pom.xml
 README.md
 ```
 
-## Secure Login with Hashing
-
-This system safeguards user passwords by utilizing hashing techniques, eliminating the need to store them in plain text. We implement the `BCrypt` algorithm, a robust and widely adopted password hashing function that integrates a salt to defend against rainbow table attacks.
-
-When a user registers or updates their password, the system applies `BCrypt` hashing before saving it in the database. This approach ensures that even if the database is compromised, retrieving or decrypting the actual passwords remains extremely difficult.
-
-During authentication, the entered password is hashed and compared with the stored hash to verify user credentials securely.
-
 ## Getting Started
 
 These instructions will allow you to get a working copy of the project on your local machine for development and testing purposes.
