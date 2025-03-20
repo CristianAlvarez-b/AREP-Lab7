@@ -1,6 +1,6 @@
 # Taller 7 | AREP
 
-## Twitter-Like API From Monolith to Microservices
+## API From Monolith to Microservices
 
 In this lab, we developed a Twitter-like API that allows users to create and post short messages (up to 140 characters) in a unified stream. The project was initially designed as a monolithic Spring Boot application and later evolved into a microservices-based architecture. The lab was divided into the following key stages:
 
@@ -12,19 +12,57 @@ In this lab, we developed a Twitter-like API that allows users to create and pos
 
 The entire application is deployed on AWS. This lab provided hands-on experience in API design, cloud deployment, security integration, and microservices architecture.
 
-## Architecture
+## Monolithic Architecture
 
-The system follows a serverless microservices approach, ensuring scalability and security through AWS services.
+The following deployment diagram illustrates the architecture of our monolithic system, which consists of a frontend hosted on **AWS S3**, authentication handled by **AWS Cognito**, a backend running inside a **Docker container**, and a **MySQL database on an EC2 instance**.
 
-- Frontend: A JavaScript-based web app hosted on AWS S3, accessible via CloudFront or direct S3 hosting.
-- API Gateway & Security: Amazon API Gateway routes requests to microservices, secured with AWS Cognito.
-- Microservices Layer (AWS Lambda):
-  - User Service → Manages user authentication and profiles.
-  - Post Service → Handles post creation (140-character limit).
-  - Stream Service → Aggregates posts into a global feed.
-- Database: AWS EC2 with a Docker container running MySQL.
+### **Architecture Components:**
 
-Requests flow through API Gateway, invoking Lambda functions, which interact with DynamoDB, ensuring a scalable, serverless architecture.
+1. **Browser**: The client-side interface where users interact with the application.
+2. **S3**: Hosts the static files (HTML, CSS, JS) for the frontend.
+3. **Cognito**: Manages user authentication and authorization using JWT.
+4. **Nbrok**: A tunneling tool that exposes the local backend to the internet securely via HTTPS.
+5. **Backend (Docker Local)**: The Spring Boot application running locally in a Docker container.
+6. **EC2 (Database)**: Hosts the MySQL database in a Docker container.
+
+### **Communication Flow:**
+
+- **Browser -> S3**: The browser loads static files (HTML, CSS, JS) from S3.
+- **Browser -> Cognito**: The browser authenticates users via Cognito and receives JWT tokens.
+- **Browser -> Nbrok**: The browser sends API requests to the backend through the Nbrok tunnel.
+- **Nbrok -> Backend**: Nbrok forwards requests to the locally running backend.
+- **Backend -> EC2 (Database)**: The backend interacts with the database hosted on EC2 using JDBC.
+
+### **Deployment Diagram:**
+
+![](src/main/resources/images/architecture-mono.png)
+
+This setup ensures a scalable and secure system, allowing user authentication via AWS Cognito, serverless frontend hosting on S3, and a persistent data layer using MySQL on EC2.
+
+## Microservices Architecture
+
+This diagram illustrates the architecture of the application after splitting the monolith into microservices. The components are:
+
+### **Architecture Components:**
+
+1. **Browser**: The client-side interface where users interact with the application.
+2. **S3**: Hosts the static files (HTML, CSS, JS) for the frontend.
+3. **API Gateway**: Acts as the entry point for HTTP requests and routes them to the appropriate Lambda functions.
+4. **Lambda 1, 2, 3**: Three Lambda functions representing the microservices (e.g., `UsuarioService`, `HiloService`, `PostService`).
+5. **EC2 (Docker + MySQL)**: Hosts the MySQL database in a Docker container.
+
+### **Communication Flow:**
+
+- **Browser -> S3**: The browser loads static files (HTML, CSS, JS) from S3.
+- **Browser -> API Gateway**: The browser sends API requests to the API Gateway.
+- **API Gateway -> Lambda 1, 2, 3**: The API Gateway routes requests to the corresponding Lambda functions.
+- **Lambda User, Post, Stream -> EC2 (MySQL)**: Each Lambda function interacts with the MySQL database hosted on EC2 using JDBC.
+
+### **Deployment Diagram:**
+
+![](src/main/resources/images/architecture-micro.png)
+
+This architecture ensures scalability and separation of concerns, with each microservice handling a specific functionality.
 
 ## Class Design
 
@@ -60,13 +98,21 @@ src/main/java
 
 src/main/resources
     ├── images/                             # README resources
+    ├── static/                             # Front files for S3 Bucket
     ├── application.properties
     └── application.yml
 
 src/test/java
 └── co.edu.ecuelaing.arep.microservicios
-    ├── Lab7
-    │   └── Lab7ApplicationTests.java
+    ├── contoller
+    │   ├── AuthControllerTest.java
+    │   ├── PostControllerTest.java
+    │   └── UserControllerTest.java
+    ├── service
+    │   ├── JwtUtilTest.java
+    │   ├── PostServiceTest.java
+    │   ├── RepostServiceTest.java
+    │   └── UserServiceTest.java
     └── MicroserviciosApplicationTests.java
 
 HELP.md
