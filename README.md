@@ -15,3 +15,9 @@ Agregue seguridad usando JWT con el servicio cognito de AWS o otra tecnología.
 
 https://github.com/user-attachments/assets/5b23ca6b-346a-4a0e-8785-187f4abd51e9
 
+Separe el monolito en tres microservicios independientes usando lambda.
+Despliegue el servicio en AWS lambda
+
+
+https://github.com/user-attachments/assets/416c9f0f-8e6c-46a6-8a50-9cc717d5570e
+
